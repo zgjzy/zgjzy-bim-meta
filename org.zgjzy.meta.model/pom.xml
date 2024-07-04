@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.zgjzy.meta</groupId>
+        <artifactId>org.zgjzy.meta</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>org.zgjzy.meta.model</artifactId>
+    <packaging>jar</packaging>
+    
+    <properties>
+        <maven.compiler.source>19</maven.compiler.source>
+        <maven.compiler.target>19</maven.compiler.target>
+        <checkstyle.violation.ignore>FileLength</checkstyle.violation.ignore>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.modello</groupId>
+                <artifactId>modello-maven-plugin</artifactId>
+                <configuration>
+                    <version>1.0.0</version>
+                    <models>
+                        <model>src/main/mdo/model-meta.mdo</model>
+                    </models>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>modello</id>
+                        <goals>
+                            <goal>java</goal>
+                            <goal>xpp3-reader</goal>
+                            <goal>xpp3-extended-reader</goal>
+                            <goal>xpp3-writer</goal>
+                            <goal>xpp3-extended-writer</goal>
+                            <goal>xsd</goal>
+                            <goal>jackson-reader</goal>
+                            <goal>jackson-writer</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <!-- Exclude the navigation file for Maven 1 sites
+                    as it interferes with the site generation. -->
+                    <moduleExcludes>
+                        <xdoc>navigation.xml</xdoc>
+                    </moduleExcludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>    
+    
+</project>

@@ -1,0 +1,862 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<model xmlns="http://codehaus-plexus.github.io/MODELLO/2.0.0" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/2.0.0 
+         https://codehaus-plexus.github.io/modello/xsd/modello-2.0.0.xsd"
+       xml.namespace="http://zgjzy.org.cn/model-meta/${version}"
+       xml.schemaLocation="https://zgjzy.org.cn/xsd/model-meta-${version}.xsd">
+    <id>model-meta</id>
+    <name>ModelMeta</name>
+    <description>
+    <![CDATA[
+    <p>这是BIM中使用的模型元描述符的参考实现。</p>
+    ]]>
+    </description>
+    <defaults>
+        <default>
+            <key>package</key>
+            <value>org.zgjzy.meta.model</value>
+        </default>
+    </defaults>
+    <classes>
+        <class rootElement="true" xml.tagName="model" java.clone.hook="cloneHook" java.clone="deep">
+            <name>Model</name>
+            <description>
+        <![CDATA[
+        <code>&lt;model&gt;</code> 是元数据描述的根元素。以下是可能的子元素。
+        ]]>
+            </description>
+            <version>1.0.0+</version>
+            <fields>
+
+                <!-- ================== -->
+                <!-- 元数据格式的版本      -->
+                <!-- ================== -->
+                <field>
+                    <name>metaVersion</name>
+                    <version>1.0.0+</version>
+                    <required>true</required>
+                    <description>
+                        描述模型元数据格式的版本号，例如当前元数据格式的版本是1.0.0。
+                    </description>
+                    <type>String</type>
+                </field>
+
+                <!-- =============== -->
+                <!-- 模型分组结构       -->
+                <!-- =============== -->
+                <field xdoc.separator="blank">
+                    <name>groupId</name>
+                    <version>1.0.0+</version>
+                    <required>false</required>
+                    <description>
+                        分组结构，用于根据个人、项目、企业的需求或规定，组织、管理模型数据，其中包含的\，用于分割目录，形成目录结构。
+                    </description>
+                    <type>String</type>
+                </field>
+
+                <!-- ====================================================================== -->
+                <!-- 模型标识                                                                 -->
+                <!-- ====================================================================== -->
+                <field>
+                    <name>modelId</name>
+                    <version>1.0.0+</version>
+                    <required>true</required>
+                    <description>
+             <![CDATA[
+             相当于模型的文件名，用于标识模型，命名不可以包含\/:*?"<>|等特殊字符。
+             ]]>
+                    </description>
+                    <type>String</type>
+                </field>
+
+                <!-- ============== -->
+                <!-- 模型版本         -->
+                <!-- ============== -->
+                <field>
+                    <name>version</name>
+                    <version>1.0.0+</version>
+                    <required>true</required>
+                    <description>
+                        模型的当前版本。
+                    </description>
+                    <type>String</type>
+                </field>
+
+                <!-- ================ -->
+                <!-- 模型存储格式       -->
+                <!-- ================ -->
+                <field>
+                    <name>packaging</name>
+                    <version>1.0.0+</version>
+                    <required>true</required>
+                    <description>
+                        相当于模型文件后缀，用于标识模型的格式类型，例如，ifc、dwg、dgn、rvt、skp等所有可能的文件格式，也可以是自定义。
+                    </description>
+                    <type>String</type>
+                </field>
+
+                <!-- =============== -->
+                <!-- 模型描述信息      -->
+                <!-- =============== -->
+                <field>
+                    <name>description</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        详细描述模型的信息。
+                    </description>
+                    <type>String</type>
+                </field>
+
+                <!-- ================ -->
+                <!-- 模型创建           -->
+                <!-- ================ -->
+                <field>
+                    <name>creationTime</name>
+                    <version>1.0.0+</version>
+                    <required>true</required>
+                    <description>
+                        时间表示法应符合国家标准GB/T 7408-2005《数据元和交换格式·信息交换·日期和时间表示法》中定义的扩展格式表示，YYYY-MM-DDThh:mm:ss。
+                    </description>
+                    <type>String</type>
+                </field>
+
+                <!-- ================== -->
+                <!-- 组织机构信息          -->
+                <!-- ================== -->
+                <field>
+                    <name>organization</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        描述模型所属组织机构的属性，可用于声明模型的版权声明和链接。
+                    </description>
+                    <alias>organisation</alias>
+                    <association>
+                        <type>Organization</type>
+                    </association>
+                </field>
+
+                <!-- =============== -->
+                <!-- 许可信息          -->
+                <!-- =============== -->
+                <field>
+                    <name>licenses</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        描述模型的所有许可信息，若有多个许可，可以分开描述，并假定用户可以选择其中部分使用，而不是全部。
+                        另外，模型的许可信息仅适用于本模型，不适用于依赖的模型。
+                    </description>
+                    <association>
+                        <type>License</type>
+                        <multiplicity>*</multiplicity>
+                    </association>
+                </field>
+
+                <!-- ==================== -->
+                <!-- 模型创建者信息          -->
+                <!-- ==================== -->
+                <field xdoc.separator="blank">
+                    <name>developers</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        模型创建的贡献者，可以有多个。
+                    </description>
+                    <association>
+                        <type>Person</type>
+                        <multiplicity>*</multiplicity>
+                    </association>
+                </field>
+                
+                <!-- ================== -->
+                <!-- 模型检查者信息        -->
+                <!-- ================== -->
+                <field>
+                    <name>examiners</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        模型检查者，可以有多个。
+                    </description>
+                    <association>
+                        <type>Person</type>
+                        <multiplicity>*</multiplicity>
+                    </association>
+                </field>
+
+                <!-- =================== -->
+                <!-- 版本管理系统信息       -->
+                <!-- =================== -->
+                <field xdoc.separator="blank">
+                    <name>scm</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        模型的版本管理系统信息，例如Git、Subversion、CVS等。
+                    </description>
+                    <association>
+                        <type>Scm</type>
+                    </association>
+                </field>
+
+                <!-- ====================== -->
+                <!-- 问题追踪系统              -->
+                <!-- ====================== -->
+                <field>
+                    <name>issueManagement</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        模型的问题追踪系统信息。
+                    </description>
+                    <association>
+                        <type>IssueManagement</type>
+                    </association>
+                </field>
+
+                <field xdoc.separator="blank">
+                    <name>repository</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        模型的远程存储库部署信息。
+                    </description>
+                    <association>
+                        <type>Repository</type>
+                    </association>
+                </field>
+                <field xdoc.separator="blank">
+                    <name>properties</name>
+                    <version>1.0.0+</version>
+                    <description>
+            <![CDATA[
+            可以在整个元数据中作为替代使用的属性，并且在启用时用作资源中的过滤器。
+            格式：<code>&lt;name&gt;value&lt;/name&gt;</code>。
+            ]]>
+                    </description>
+                    <type>Properties</type>
+                    <association xml.mapStyle="inline">
+                        <type>String</type>
+                        <multiplicity>*</multiplicity>
+                    </association>
+                </field>
+
+                <!-- =============== -->
+                <!-- 标签信息          -->
+                <!-- =============== -->
+                <field>
+                    <name>tags</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        描述模型的标签信息，用于检索模型。
+                    </description>
+                    <association>
+                        <type>String</type>
+                        <multiplicity>*</multiplicity>
+                    </association>
+                </field>
+
+                <field>
+                    <name>dependencies</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        模型所有的依赖项，可以自动下载到本地。
+                    </description>
+                    <association>
+                        <type>Dependency</type>
+                        <multiplicity>*</multiplicity>
+                    </association>
+                </field>
+            </fields>
+            <codeSegments>
+                <codeSegment>
+                    <version>1.0.0+</version>
+                    <code>
+            <![CDATA[
+       /**
+         * 元数据文件。
+         */
+        private java.io.File metaFile;
+
+    private void cloneHook( Model copy )
+    {
+        copy.metaFile = metaFile;
+    }
+
+    /**
+     * 如果有，获取模型的元数据文件。
+     *
+     * @return 返回本地的模型元数据文件，如果是从远程库得到元数据信息，则返回空值 {@code null} 。
+     */
+    public java.io.File getMetaFile()
+    {
+        return metaFile;
+    }
+
+    public void setMetaFile( java.io.File metaFile )
+    {
+        this.metaFile = ( metaFile != null ) ? metaFile.getAbsoluteFile() : null;
+    }
+
+    /**
+     * 如果有，获取相应模型的根目录。
+     *
+     * @return 返回根目录，如果是从远程库得到元数据信息，则返回空值 {@code null} 。
+     */
+    public java.io.File getProjectDirectory()
+    {
+        return ( metaFile != null ) ? metaFile.getParentFile() : null;
+    }
+
+    /**
+     * @return 模型标识 <code>groupId:modelId:packaging:version</code>
+     */
+    public String getId()
+    {
+        StringBuilder id = new StringBuilder( 64 );
+
+        id.append( getGroupId() );
+        id.append( ":" );
+        id.append( getModelId() );
+        id.append( ":" );
+        id.append( getPackaging() );
+        id.append( ":" );
+        id.append( getVersion() );
+
+        return id.toString();
+    }
+
+    @Override
+    public String toString()
+    {
+        return getId();
+    }
+            ]]>
+                    </code>
+                </codeSegment>        
+            </codeSegments>
+        </class>
+
+        <class java.clone="deep">
+            <name>Person</name>
+            <description>
+                描述人员信息.
+            </description>
+            <version>1.0.0+</version>
+            <fields>
+                <field>
+                    <name>id</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        人员的唯一标识。
+                    </description>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>name</name>
+                    <version>1.0.0+</version>
+                    <description>姓名全名。</description>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>email</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        人员邮箱信息。
+                    </description>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>organization</name>
+                    <alias>organisation</alias>
+                    <version>1.0.0+</version>
+                    <description>
+                        人员所属组织。
+                    </description>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>roles</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        人员角色。
+                    </description>
+                    <association>
+                        <type>String</type>
+                        <multiplicity>*</multiplicity>
+                    </association>
+                </field>
+                <field>
+                    <name>properties</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        人员属性。
+                    </description>
+                    <type>Properties</type>
+                    <association xml.mapStyle="inline">
+                        <type>String</type>
+                        <multiplicity>*</multiplicity>
+                    </association>
+                </field>
+            </fields>
+            <codeSegments>
+                <codeSegment>
+                    <version>1.0.0+</version>
+                    <code>
+            <![CDATA[
+    /**
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+        return "Person {name=" + name + ", email=" + email + "}";
+    }
+            ]]>
+                    </code>
+                </codeSegment>
+            </codeSegments>
+        </class>
+        
+        <class java.clone="deep">
+            <name>Dependency</name>
+            <version>1.0.0+</version>
+            <description>
+        <![CDATA[
+        The <code>&lt;dependency&gt;</code> element contains information about a dependency
+        of the project.
+        ]]>
+            </description>
+            <fields>
+                <field>
+                    <name>repository</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        模型所在库。
+                    </description>
+                    <association>
+                        <type>Repository</type>
+                    </association>
+                </field>
+                <field>
+                    <name>groupId</name>
+                    <version>1.0.0+</version>
+                    <required>true</required>
+                    <description>
+            <![CDATA[
+            The project group that produced the dependency, e.g.
+            ]]>
+                    </description>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>modelId</name>
+                    <version>1.0.0+</version>
+                    <required>true</required>
+                    <description>
+                        模型标识
+                    </description>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>packaging</name>
+                    <version>1.0.0+</version>
+                    <required>true</required>
+                    <description>
+                        模型存储类型
+                    </description>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>version</name>
+                    <version>1.0.0+</version>
+                    <description>
+            <![CDATA[
+              模型的版本，例如 <code>3.2.1</code>，也可以是版本的范围。
+            ]]>
+                    </description>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>exclusions</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        当计算传递依赖时，应从此依赖项中排除的模型。
+                    </description>
+                    <association>
+                        <type>Exclusion</type>
+                        <multiplicity>*</multiplicity>
+                    </association>
+                </field>
+                <field>
+                    <name>type</name>
+                    <version>1.0.0+</version>
+                    <description>
+            <![CDATA[
+             依赖类型，分为：Dependency和Reference两类。在计算依赖传递时，仅对类型为Dependency的依赖项计算，不对类型为Reference的计算。
+            ]]>
+                    </description>
+                    <type>String</type>
+                </field>
+            </fields>
+            <codeSegments>
+                <codeSegment>
+                    <version>1.0.0+</version>
+                    <code>
+            <![CDATA[
+    /**
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+        return "Dependency {groupId=" + groupId + ", modelId=" + modelId + ", version=" + version + ", type=" + type + "}";
+    }
+            ]]>
+                    </code>
+                </codeSegment>
+                <codeSegment>
+                    <version>1.0.0+</version>
+                    <code>
+            <![CDATA[
+    private String managementKey;
+
+    /**
+     * @return the management key as <code>groupId:artifactId:type</code>
+     */
+    public String getManagementKey()
+    {
+        if ( managementKey == null )
+        {
+            managementKey = groupId + ":" + modelId + ":" + type;
+        }
+        return managementKey;
+    }
+
+    /**
+     * Clears the management key in case one field has been modified.
+     */
+    public void clearManagementKey()
+    {
+        managementKey = null;
+    }
+            ]]>
+                    </code>
+                </codeSegment>
+            </codeSegments>
+        </class>
+        
+        <class java.clone="deep">
+            <name>Exclusion</name>
+            <version>1.0.0+</version>
+            <description>
+        <![CDATA[
+        <code>&lt;exclusion&gt;</code> 包含计算模型依赖关系时，排除的模型。
+        ]]>
+            </description>
+            <fields>
+                <field>
+                    <name>groupId</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        分组结构。
+                    </description>
+                    <type>String</type>
+                    <required>true</required>
+                </field>
+                <field>
+                    <name>modelId</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        模型标识。
+                    </description>
+                    <type>String</type>
+                    <required>true</required>
+                </field>
+            </fields>
+        </class>
+
+        <class java.clone="deep">
+            <name>IssueManagement</name>
+            <description>
+                问题跟踪系统描述。
+            </description>
+            <version>1.0.0+</version>
+            <fields>
+                <field>
+                    <name>system</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        问题跟踪系统名称。
+                    </description>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>url</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        问题跟踪系统URL。
+                    </description>
+                    <type>String</type>
+                </field>
+            </fields>
+            <codeSegments>
+                <codeSegment>
+                    <version>1.0.0+</version>
+                    <code>
+            <![CDATA[
+    /**
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+        return "IssueManagement {system=" + system + ", url=" + url + "}";
+    }
+            ]]>
+                    </code>
+                </codeSegment>
+            </codeSegments>
+        </class>
+
+        <class java.clone="deep">
+            <name>License</name>
+            <description>
+                描述模型的使用许可证，仅适用于限于本模型，而不适用于依赖的模型。
+            </description>
+            <version>1.0.0+</version>
+            <fields>
+                <field>
+                    <name>name</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        许可证的法定全称。
+                    </description>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>url</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        许可证文本的官方URL。
+                    </description>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>comments</name>
+                    <description>
+                        与许可证有关的注释信息。
+                    </description>
+                    <version>1.0.0+</version>
+                    <type>String</type>
+                </field>
+            </fields>
+            <codeSegments>
+                <codeSegment>
+                    <version>1.0.0+</version>
+                    <code>
+            <![CDATA[
+    /**
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+        return "License {name=" + name + ", url=" + url + "}";
+    }
+            ]]>
+                    </code>
+                </codeSegment>
+            </codeSegments>
+        </class>
+
+        <class java.clone="deep">
+            <name>Organization</name>
+            <description>
+                组织信息。
+            </description>
+            <version>1.0.0+</version>
+            <fields>
+                <field>
+                    <name>name</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        组织的全称。
+                    </description>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>url</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        组织主页。
+                    </description>
+                    <type>String</type>
+                </field>
+            </fields>
+            <codeSegments>
+                <codeSegment>
+                    <version>1.0.0+</version>
+                    <code>
+            <![CDATA[
+    /**
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+        return "Organization {name=" + name + ", url=" + url + "}";
+    }
+            ]]>
+                    </code>
+                </codeSegment>
+            </codeSegments>
+        </class>
+
+        <class java.clone="deep">
+            <name>Scm</name>
+            <version>1.0.0+</version>
+            <description>
+        <![CDATA[
+        源代码控制管理（Source Control Management，<code>&lt;scm&gt;</code> ）信息描述。
+        ]]>
+            </description>
+            <fields>
+                <field>
+                    <name>connection</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        源代码控制管理系统的URL。
+                    </description>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>tag</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        当前版本的标签。
+                    </description>
+                    <type>String</type>
+                </field>
+            </fields>
+            <codeSegments>
+                <codeSegment>
+                    <version>1.0.0+</version>
+                    <code>
+            <![CDATA[
+    /**
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+        return "Scm {connection=" + connection + "}";
+    }
+            ]]>
+                    </code>
+                </codeSegment>
+            </codeSegments>
+        </class>
+
+        <class java.clone="deep">
+            <name>Repository</name>
+            <version>1.0.0+</version>
+            <description>
+                包含建立远程存储库连接所需的信息。
+            </description>
+            <fields>
+                <field>
+                    <name>name</name>
+                    <version>1.0.0+</version>
+                    <description>
+                        便于阅读的命名。
+                    </description>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>url</name>
+                    <version>1.0.0+</version>
+                    <required>true</required>
+                    <description>
+            <![CDATA[
+            存储库的URL，一般表示为<code>protocol://hostname/path</code>。
+            ]]>
+                    </description>
+                    <type>String</type>
+                </field>
+            </fields>
+        </class>
+
+        <class locationTracker="locations" java.clone="shallow">
+            <name>InputLocation</name>
+            <version>1.0.0+</version>
+            <fields>
+                <!-- line, column and source fields are auto-generated by Modello -->
+            </fields>
+            <codeSegments>
+                <codeSegment>
+                    <version>1.0.0+</version>
+                    <code>
+                    <![CDATA[
+
+            @Override
+            public String toString()
+            {
+                return getLineNumber() + " : " + getColumnNumber() + ", " + getSource();
+            }
+                    ]]>
+                    </code>
+                </codeSegment>
+            </codeSegments>
+        </class>
+        <class sourceTracker="source" java.clone="shallow">
+            <name>InputSource</name>
+            <version>1.0.0+</version>
+            <fields>
+                <field>
+                    <name>modelId</name>
+                    <version>1.0.0+</version>
+                    <type>String</type>
+                    <description>
+                    <![CDATA[
+                    元数据格式中标识 {@code <groupId>:<modelId>:<version>}。
+                    ]]>
+                    </description>
+                </field>
+                <field>
+                    <name>location</name>
+                    <version>1.0.0+</version>
+                    <type>String</type>
+                    <description>
+                    <![CDATA[
+                    元数据路径或URL，如果未知则为空 {@code null} 。
+                    ]]>
+                    </description>
+                </field>
+            </fields>
+            <codeSegments>
+                <codeSegment>
+                    <version>1.0.0+</version>
+                    <code>
+                    <![CDATA[
+            @Override
+            public String toString()
+            {
+                return getModelId() + " " + getLocation();
+            }
+                    ]]>
+                    </code>
+                </codeSegment>
+            </codeSegments>
+        </class>
+    </classes>
+</model>
